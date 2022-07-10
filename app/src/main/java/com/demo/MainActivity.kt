@@ -15,7 +15,8 @@ class MainActivity : AppCompatActivity() {
     private val feeds = listOf(
         "https://www.npr.org/rss/rss.php?id=1001",
         "http://rss.donga.com/total.xml",
-        "http://rss.hankooki.com/sports/sp00_list.xml"
+        "http://rss.hankooki.com/sports/sp00_list.xml",
+        "asdifo"
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,14 +31,23 @@ class MainActivity : AppCompatActivity() {
     private fun asyncLoadNews() = GlobalScope.launch {
         val requests = mutableListOf<Deferred<List<String>>>()
         feeds.mapTo(requests) { asyncFetchHeadlines(it, dispatcher) }
-        requests.forEach { it.await() }
+        requests.forEach { it.join() }
 
-        val headlines = requests.flatMap { it.getCompleted() }
+        val headlines = requests
+            .filter { !it.isCancelled }
+            .flatMap { it.getCompleted() }
 
+        val failed = requests.filter { it.isCancelled }.size
         val newsCount = findViewById<TextView>(R.id.newsCount)
+        val warnings = findViewById<TextView>(R.id.warnings)
+        val obtained = requests.size - failed
 
         launch(Dispatchers.Main) {
-            newsCount.text = "Found ${headlines.size} News in ${requests.size} feeds"
+            newsCount.text = "Found ${headlines.size} News in ${obtained} feeds"
+
+            if (failed > 0) {
+                warnings.text = "Failed to fetch $failed feeds"
+            }
         }
     }
 
