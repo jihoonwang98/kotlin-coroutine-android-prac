@@ -26,26 +26,3 @@
         app:layout_constraintTop_toBottomOf="@id/progressBar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-
-<!--    private val feeds = listOf(-->
-<!--    "https://www.npr.org/rss/rss.php?id=1001",-->
-<!--    "http://rss.cnn.com/rss/cnn_topstories.rss",-->
-<!--    "http://feeds.foxnews.com/foxnews/politics?format=xml"-->
-<!--    )-->
-
-<!--    private fun asyncFetchHeadlines(feed: String, dispatcher: CoroutineDispatcher) = GlobalScope.async(dispatcher) {-->
-<!--    val builder = factory.newDocumentBuilder()-->
-<!--    val xml = builder.parse(feed)-->
-<!--    val news = xml.getElementsByTagName("channel").item(0)-->
-
-<!--    (0 until news.childNodes.length)-->
-<!--    .asSequence()-->
-<!--    .map { news.childNodes.item(it) }-->
-<!--    .filter { Node.ELEMENT_NODE == it.nodeType }-->
-<!--    .map { it as Element }-->
-<!--    .filter { "item" == it.tagName }-->
-<!--    .map {-->
-<!--    it.getElementsByTagName("title").item(0).textContent-->
-<!--    }-->
-<!--    .toList()-->
-<!--    }-->
